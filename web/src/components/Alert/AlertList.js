@@ -27,6 +27,14 @@ class AlertList extends Component {
   renderAlerts() {
     const { alerts } = this.props;
 
+    alerts.sort((a, b) => {
+      if(a.email > b.email) {
+        return 1;
+      } else if(a.email < b.email) {
+        return -1;
+      }
+      return 0;
+    })
     return alerts.map((alert) => {
       return <AlertListItem
         key={ alert._id }
