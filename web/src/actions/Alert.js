@@ -10,12 +10,12 @@ export const ERROR_ALERT = 'ERROR_ALERT';
 
 const errorHandler = (err) => {
   const { message } = err;
-
+  const responseMessageError = err.response.data.errors[0].message
   return {
     type: ERROR_ALERT,
     payload: {
       error: true,
-      message
+      message: responseMessageError
     },
   };
 }
@@ -85,6 +85,7 @@ export function updateAlert(dispatch) {
         payload: { data },
       };
     } catch (err) {
+      console.error(err);
       return errorHandler(err);
     }
   }
