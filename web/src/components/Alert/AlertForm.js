@@ -11,7 +11,7 @@ class AlertForm extends Component {
 
   render() {
     const { alert } = this.props;
-
+    console.log(alert)
     return (
       <form>
         <div className="form-group row">
@@ -38,6 +38,7 @@ class AlertForm extends Component {
             </select>
           </div>
         </div>
+        <p className="text-danger">{ alert.message ? 'We had a problem to save this keyword! Error: ' + alert.message : '' }</p>
 
         <button
           type="submit"
