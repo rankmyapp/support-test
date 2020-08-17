@@ -1,7 +1,9 @@
 const Alert = require('../models/alert');
-const { saveSchema } = require('../validators/alerts');
+const { saveSchema, updateSchema } = require('../validators/alerts');
 const { HTTP } = require('../helpers/constants');
 const { joiErrorHandling, mongoErrorHandling, commonErrorHandling } = require('../helpers/error-handler');
+const { date } = require('@hapi/joi');
+const { mongo } = require('mongoose');
 
 const find = async (req, res) => {
   const alerts = await Alert.find({});
@@ -26,6 +28,7 @@ const save = async (req, res) => {
 
   const alert = await Alert.findOne({ email, term });
   if (alert) {
+    console.log('validacao error common');
     return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
       commonErrorHandling('term', 'Term already registered for this user')
     );
@@ -51,12 +54,17 @@ const update = async (req, res) => {
       commonErrorHandling('_id', 'Alert not found')
     );
   }
-
-  alert.overwrite({
+  alert.set({
     email: email || alert.email,
     frequency: frequency || alert.frequency,
     term: term || alert.term
   });
+  const { error } = updateSchema.validate(req.body);
+  if (error) {
+    return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
+      joiErrorHandling(error)
+    );
+  }
 
   try {
     await alert.save();
