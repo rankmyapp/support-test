@@ -11,7 +11,6 @@ class AlertForm extends Component {
 
   render() {
     const { alert } = this.props;
-    console.log(alert)
     return (
       <form>
         <div className="form-group row">

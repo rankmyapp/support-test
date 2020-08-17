@@ -28,7 +28,6 @@ const save = async (req, res) => {
 
   const alert = await Alert.findOne({ email, term });
   if (alert) {
-    console.log('validacao error common');
     return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
       commonErrorHandling('term', 'Term already registered for this user')
     );
