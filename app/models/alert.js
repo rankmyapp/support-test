@@ -6,6 +6,11 @@ const notificationSchema = new mongoose.Schema({
   frequency: { type: Number, required: true },
   created: { type: Date, default: Date.now },
   updated: { type: Date, default: Date.now },
+}, {
+  timestamps: {
+    createdAt: 'created',
+    updatedAt: 'updated'
+  }
 });
 
 module.exports = mongoose.model('Alert', notificationSchema);
