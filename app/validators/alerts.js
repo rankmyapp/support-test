@@ -17,6 +17,21 @@ const saveSchema = Joi.object({
     .required()
 });
 
+const updateSchema = Joi.object({
+  email: Joi.string()
+    .email()
+    .min(3)
+    .max(50),
+  term: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(50),
+  frequency: Joi
+    .number()
+    .valid(2, 5, 30)
+});
+
 module.exports = {
-  saveSchema
+  saveSchema,
+  updateSchema
 };
