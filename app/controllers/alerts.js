@@ -8,7 +8,7 @@ const {
 } = require("../helpers/error-handler");
 
 const find = async (req, res) => {
-  const alerts = await Alert.find({});
+  const alerts = await Alert.find({}).sort({ email: 1 });
   return res.json({ alerts });
 };
 
