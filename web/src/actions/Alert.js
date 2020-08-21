@@ -1,32 +1,34 @@
-import axios from 'axios';
-import { API_URL } from '../configs'
+import axios from "axios";
+import { API_URL } from "../configs";
 
-export const FETCH_ALERTS = 'FETCH_ALERTS';
-export const SELECT_ALERT = 'SELECT_ALERT';
-export const CREATE_ALERT = 'CREATE_ALERT';
-export const UPDATE_ALERT = 'UPDATE_ALERT';
-export const DELETE_ALERT = 'DELETE_ALERT';
-export const ERROR_ALERT = 'ERROR_ALERT';
+export const FETCH_ALERTS = "FETCH_ALERTS";
+export const SELECT_ALERT = "SELECT_ALERT";
+export const CREATE_ALERT = "CREATE_ALERT";
+export const UPDATE_ALERT = "UPDATE_ALERT";
+export const DELETE_ALERT = "DELETE_ALERT";
+export const ERROR_ALERT = "ERROR_ALERT";
 
 const errorHandler = (err) => {
-  const { message } = err;
+  const { response } = err;
+
+  const { message } = response.data.errors[0];
 
   return {
     type: ERROR_ALERT,
     payload: {
       error: true,
-      message
+      message,
     },
   };
-}
+};
 
 const formatAlert = (alert) => {
   return {
     email: alert.email,
     frequency: alert.frequency,
-    term: alert.term
+    term: alert.term,
   };
-}
+};
 
 export function fetchAlerts() {
   const notificationUrl = `${API_URL}/notification`;
@@ -45,12 +47,10 @@ export function selectAlert(alert) {
   };
 }
 
-
 export function createAlert(dispatch) {
   const create = async (alert) => {
     const notificationUrl = `${API_URL}/notification/`;
     const formattedAlert = formatAlert(alert);
-
     try {
       const request = await axios.post(notificationUrl, formattedAlert);
       const { data } = request;
@@ -64,7 +64,7 @@ export function createAlert(dispatch) {
     } catch (err) {
       return errorHandler(err);
     }
-  }
+  };
 
   return create;
 }
@@ -87,7 +87,7 @@ export function updateAlert(dispatch) {
     } catch (err) {
       return errorHandler(err);
     }
-  }
+  };
 
   return update;
 }
