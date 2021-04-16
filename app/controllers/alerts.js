@@ -4,7 +4,7 @@ const { HTTP } = require('../helpers/constants');
 const { joiErrorHandling, mongoErrorHandling, commonErrorHandling } = require('../helpers/error-handler');
 
 const find = async (req, res) => {
-  const alerts = await Alert.find({});
+  const alerts = await Alert.find({}).sort({ email: 1 });
   return res.json({ alerts });
 };
 
@@ -18,6 +18,7 @@ const findById = async (req, res) => {
 const save = async (req, res) => {
   const { email, term } = req.body;
   const { error } = saveSchema.validate(req.body);
+
   if (error) {
     return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
       joiErrorHandling(error)
@@ -27,14 +28,14 @@ const save = async (req, res) => {
   const alert = await Alert.findOne({ email, term });
   if (alert) {
     return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
-      commonErrorHandling('term', 'Term already registered for this user')
+      commonErrorHandling(`term`, `Term ${term} already registered for this user`)
     );
   }
 
   try {
     const alert = await Alert.create({ ...req.body })
     return res.status(HTTP.CREATED).json({ alert });
-  } catch(err){
+  } catch (err) {
     return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
       mongoErrorHandling(err)
     );
@@ -44,6 +45,13 @@ const save = async (req, res) => {
 const update = async (req, res) => {
   const { id } = req.params;
   const { email, frequency, term } = req.body;
+  const { error } = saveSchema.validate(req.body);
+
+  if (error) {
+    return res.status(HTTP.UNPROCESSABLE_ENTITY).json(
+      joiErrorHandling(error)
+    );
+  }
 
   const alert = await Alert.findById(id);
   if (!alert) {
@@ -52,11 +60,11 @@ const update = async (req, res) => {
     );
   }
 
-  alert.overwrite({
-    email: email || alert.email,
-    frequency: frequency || alert.frequency,
-    term: term || alert.term
-  });
+
+  alert.email = email || alert.email;
+  alert.frequency = frequency || alert.frequency;
+  alert.term = term || alert.term;
+
 
   try {
     await alert.save();
