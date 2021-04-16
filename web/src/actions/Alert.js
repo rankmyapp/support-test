@@ -9,13 +9,13 @@ export const DELETE_ALERT = 'DELETE_ALERT';
 export const ERROR_ALERT = 'ERROR_ALERT';
 
 const errorHandler = (err) => {
-  const { message } = err;
+  const { response } = err;
 
   return {
     type: ERROR_ALERT,
     payload: {
       error: true,
-      message
+      message: response.data
     },
   };
 }
