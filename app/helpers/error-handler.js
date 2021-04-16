@@ -23,7 +23,7 @@ const joiErrorHandling = (err) => {
 
 const commonErrorHandling = (path, message) => {
   return {
-    errors: [{ path, message}]
+    errors: [{ path, message }]
   };
 };
 
