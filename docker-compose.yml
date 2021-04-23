@@ -26,8 +26,6 @@ services:
     build:
        context: ./app
     image: support-test-node:1.0
-    volumes:
-      - ./app:/var/www/app:cached
     links:
       - mongodb:mongodb
       - redis:redis
@@ -42,7 +40,5 @@ services:
     build:
        context: ./web
     image: support-test-web:1.0
-    volumes:
-      - ./web:/var/www/web:cached
     ports:
       - 3000:3000

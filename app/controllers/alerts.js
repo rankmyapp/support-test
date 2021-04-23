@@ -4,7 +4,20 @@ const { HTTP } = require('../helpers/constants');
 const { joiErrorHandling, mongoErrorHandling, commonErrorHandling } = require('../helpers/error-handler');
 
 const find = async (req, res) => {
-  const alerts = await Alert.find({});
+  const alerts = await Alert.find({}).sort({ email: 1 });
+  
+  alerts.sort((a, b) => {
+    if(a.email > b.email){
+      return 1
+    }
+    
+    if(a.email < b.email){
+      return -1
+    }
+
+    return 0
+  });
+
   return res.json({ alerts });
 };
 
