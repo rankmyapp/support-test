@@ -3,9 +3,9 @@ FROM node:lts-alpine
 LABEL mantainer="RankMyAPP"
 LABEL version="1.0"
 
-COPY ./ /var/www/app
-
 WORKDIR /var/www/app
+
+COPY ./ /var/www/app
 
 RUN yarn install
 

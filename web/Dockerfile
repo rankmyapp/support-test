@@ -5,6 +5,8 @@ LABEL version="1.0"
 
 WORKDIR /var/www/web
 
+COPY ./ /var/www/web
+
 RUN yarn install
 
 EXPOSE 3000
